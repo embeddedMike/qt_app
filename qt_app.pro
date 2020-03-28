@@ -18,12 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/JsonApiAirQuality.cpp
+    src/JsonApiAirQuality.cpp \
+    src/DbManager.cpp
     #qcustomplot.cpp
 
 HEADERS += \
     inc/mainwindow.h \
-    inc/JsonApiAirQuality.hpp
+    inc/JsonApiAirQuality.hpp \
+    inc/DbManager.hpp
     #qcustomplot.h
 
 
