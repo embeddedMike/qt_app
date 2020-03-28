@@ -1,4 +1,5 @@
 ﻿#include "curl/curl.h"
+#include "inc/JsonApiAirQuality.hpp"
 #include "inc/mainwindow.h"
 #include "sqlite3.h"
 #include "gtest/gtest.h"
@@ -37,32 +38,39 @@ int main(int argc, char *argv[]) {
   MainWindow w;
   w.show();
 
-  CURL *curl;
-  long httpCode(0);
-  // std::unique_ptr<std::string> httpData(new std::string());
-  std::string httpData;
-  curl = curl_easy_init();
-  curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-  curl_easy_setopt(curl, CURLOPT_WRITEDATA, &httpData);
-  // curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-  // curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
-  // curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-  // curl_easy_setopt(curl, CURLOPT_WRITEDATA, httpData.get());
-  curl_easy_perform(curl);
-  // curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
-  // std::cout << httpCode << std::endl;
-  std::cout << "HTTP data was:\n" << httpData << std::endl;
-  curl_easy_cleanup(curl);
-  // std::cout << "HTTP data was:\n" << *httpData.get() << std::endl;
+  JsonApiAirQuality instance(url);
+  instance.initCurl();
+  instance.configureCurl();
+  instance.performCurl();
+  instance.cleanupCurl();
 
-  using json = nlohmann::json;
-  // std::string s = *httpData.get();
-  // std::cout << s << std::endl;
-  json j_complete = json::parse(httpData);
+  /*
+    CURL *curl;
+    long httpCode(0);
+    // std::unique_ptr<std::string> httpData(new std::string());
+    std::string httpData;
+    curl = curl_easy_init();
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &httpData);
+    // curl_easy_setopt(curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    // curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
+    // curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+    // curl_easy_setopt(curl, CURLOPT_WRITEDATA, httpData.get());
+    curl_easy_perform(curl);
+    // curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
+    // std::cout << httpCode << std::endl;
+    std::cout << "HTTP data was:\n" << httpData << std::endl;
+    curl_easy_cleanup(curl);
+    // std::cout << "HTTP data was:\n" << *httpData.get() << std::endl;
 
-  std::cout << j_complete["stCalcDate"] << std::endl;
+    using json = nlohmann::json;
+    // std::string s = *httpData.get();
+    // std::cout << s << std::endl;
+    json j_complete = json::parse(httpData);
 
+    std::cout << j_complete["stCalcDate"] << std::endl;
+  */
   sqlite3 *connection = nullptr;
   int result = sqlite3_open("/Users/mike/qt_app/people.db", &connection);
   if (SQLITE_OK != result) {
