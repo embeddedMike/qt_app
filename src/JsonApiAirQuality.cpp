@@ -15,7 +15,7 @@ bool JsonApiAirQuality::performCurl() {
   curl_easy_perform(curl);
   curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &_httpCode);
   std::cout << _httpCode << std::endl;
-  std::cout << "HTTP data was:\n" << _httpData << std::endl;
+  // std::cout << "HTTP data was:\n" << _httpData << std::endl;
   return true;
 }
 bool JsonApiAirQuality::cleanupCurl() {

@@ -14,6 +14,7 @@ public:
   JsonApiAirQuality() = delete;
   JsonApiAirQuality(const std::string apiUrl) : _apiUrl(apiUrl) {}
   void initCurl();
+  std::string getHttpData() { return _httpData; }
   static size_t WriteCallback(void *contents, size_t size, size_t nmemb,
                               void *userp);
   void configureCurl();
