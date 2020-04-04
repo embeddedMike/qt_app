@@ -1,6 +1,7 @@
 ﻿#include "curl/curl.h"
 #include "inc/DbManager.hpp"
-#include "inc/JsonApiAirQuality.hpp"
+#include "inc/JsonApi.hpp"
+#include "inc/JsonParser.hpp"
 #include "inc/mainwindow.h"
 #include "sqlite3.h"
 #include "gtest/gtest.h"
@@ -27,6 +28,7 @@ std::array<const std::string, 8> stationNames{
     "Kraków, ul. Złoty Róg",      "Kraków, os. Piastów",
     "Kraków, os. Wadów",          "Kraków, os. Swoszowice"};
 // std::array<const int,8> {400,401,402,10121,10123,10139,10447,11303}
+
 // http://api.openweathermap.org/data/2.5/weather?q=Krakow&appid=7ece3f05a22be77f9007d7513f44468a
 
 const QString locationsTable = "CREATE TABLE IF NOT EXISTS locations(id "
@@ -57,13 +59,13 @@ int main(int argc, char *argv[]) {
   MainWindow w;
   w.show();
 
-  JsonApiAirQuality instance(urlAllStations);
+  JsonApi instance(urlAllStations);
   instance.initCurl();
   instance.configureCurl();
   instance.performCurl();
   instance.cleanupCurl();
   // std::cout << instance.getHttpData() << std::endl;
-
+  /*
   using json = nlohmann::json;
   json j_complete = instance.getHttpData();
   json j = json::parse(instance.getHttpData());
@@ -79,8 +81,11 @@ int main(int argc, char *argv[]) {
       std::cout << item["id"] << std::endl;
     }
   }
+  */
   // std::cout << j_complete["Wrocław - Wiśniowa"] << std::endl;
   // std::cout << j_complete[0] << std::endl;
+  JsonParser instanceJsonApi(instance.getHttpData());
+  std::cout << instanceJsonApi.getUrlResponse() << std::endl;
 
   sqlite3 *connection = nullptr;
   int result = sqlite3_open("/Users/mike/qt_app/json_data.db", &connection);
@@ -90,16 +95,22 @@ int main(int argc, char *argv[]) {
   }
   std::cout << "SQLITE_OK" << result << std::endl;
 
+  QString test = "testuch";
+
+  qDebug() << test;
+
   DbManager db(path);
   QSqlQuery query;
-  QString name = "abc";
+  QString stationName =
+      QString::fromStdString(instanceJsonApi.getStationName());
+  qDebug() << "tutaj test:" << stationName;
   db.createTable(locationsTable);
   db.createTable(sensorsTable);
   db.createTable(readingsTable);
   db.createTable(airQualityTable);
   db.createTable(weatherTable);
-  query.prepare("INSERT INTO locations (name) VALUES (:name)");
-  query.bindValue(":name", name);
+  query.prepare("INSERT INTO locations (name) VALUES (:stationName)");
+  query.bindValue(":stationName", stationName);
   qDebug() << "error: " << query.lastError();
   if (query.exec()) {
     qDebug() << "error: " << query.lastError();

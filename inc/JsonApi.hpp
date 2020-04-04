@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-class JsonApiAirQuality {
+class JsonApi {
 private:
   long _httpCode;
   const std::string _apiUrl;
@@ -11,8 +11,8 @@ private:
   CURL *curl;
 
 public:
-  JsonApiAirQuality() = delete;
-  JsonApiAirQuality(const std::string apiUrl) : _apiUrl(apiUrl) {}
+  JsonApi() = delete;
+  JsonApi(const std::string apiUrl) : _apiUrl(apiUrl) {}
   void initCurl();
   std::string getHttpData() { return _httpData; }
   static size_t WriteCallback(void *contents, size_t size, size_t nmemb,
