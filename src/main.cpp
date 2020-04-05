@@ -84,8 +84,8 @@ int main(int argc, char *argv[]) {
   */
   // std::cout << j_complete["Wrocław - Wiśniowa"] << std::endl;
   // std::cout << j_complete[0] << std::endl;
-  JsonParser instanceJsonApi(instance.getHttpData());
-  std::cout << instanceJsonApi.getUrlResponse() << std::endl;
+  // JsonParser instanceJsonApi(instance.getHttpData());
+  // std::cout << instanceJsonApi.getUrlResponse() << std::endl;
 
   sqlite3 *connection = nullptr;
   int result = sqlite3_open("/Users/mike/qt_app/json_data.db", &connection);
@@ -95,27 +95,20 @@ int main(int argc, char *argv[]) {
   }
   std::cout << "SQLITE_OK" << result << std::endl;
 
-  QString test = "testuch";
-
-  qDebug() << test;
+  JsonParser instanceJsonApi(instance.getHttpData());
+  instanceJsonApi.getStationNamesAndIds();
+  instanceJsonApi.printStationNamesAndIds();
 
   DbManager db(path);
   QSqlQuery query;
-  QString stationName =
-      QString::fromStdString(instanceJsonApi.getStationName());
-  qDebug() << "tutaj test:" << stationName;
+  QString stationName = "testaas";
   db.createTable(locationsTable);
   db.createTable(sensorsTable);
   db.createTable(readingsTable);
   db.createTable(airQualityTable);
   db.createTable(weatherTable);
-  query.prepare("INSERT INTO locations (name) VALUES (:stationName)");
-  query.bindValue(":stationName", stationName);
-  qDebug() << "error: " << query.lastError();
-  if (query.exec()) {
-    qDebug() << "error: " << query.lastError();
-  }
-  db.printAllPersons();
-
+  db.addStationName(stationName);
+  db.printAllLocations();
+  db.removeAllLocations();
   return a.exec();
 }

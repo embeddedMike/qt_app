@@ -24,16 +24,16 @@ bool DbManager::createTable(const QString &table) {
 
   return success;
 }
-bool DbManager::addPerson(const QString &name) {
+bool DbManager::addStationName(QString &stationName) {
   bool success = false;
   QSqlQuery query;
 
   if (m_db.open()) {
     qDebug() << "Database is open";
   }
-  query.prepare("INSERT INTO people (name) VALUES (:name)");
+  query.prepare("INSERT INTO locations (name) VALUES (:stationName)");
   // query.exec("INSERT INTO people (name) VALUES ('Thad Beaumont')");
-  query.bindValue(":name", name);
+  query.bindValue(":stationName", stationName);
   if (query.exec()) {
     success = true;
   } else {
@@ -42,7 +42,7 @@ bool DbManager::addPerson(const QString &name) {
   return success;
 }
 
-void DbManager::printAllPersons() {
+void DbManager::printAllLocations() {
   qDebug() << "Values in db";
   QSqlQuery query("SELECT * FROM locations");
   int idName = query.record().indexOf("name");
@@ -50,6 +50,21 @@ void DbManager::printAllPersons() {
     QString name = query.value(idName).toString();
     qDebug() << "===" << name;
   }
+}
+
+bool DbManager::removeAllLocations() {
+  bool success = false;
+
+  QSqlQuery removeQuery;
+  removeQuery.prepare("DELETE FROM locations");
+
+  if (removeQuery.exec()) {
+    success = true;
+  } else {
+    qDebug() << "remove all persons failed: " << removeQuery.lastError();
+  }
+
+  return success;
 }
 
 DbManager::~DbManager() {

@@ -9,8 +9,9 @@ class DbManager {
 public:
   DbManager(const QString &path);
   bool createTable(const QString &table);
-  bool addPerson(const QString &name);
-  void printAllPersons();
+  bool addStationName(QString &stationName);
+  void printAllLocations();
+  bool removeAllLocations();
   ~DbManager();
 
 private:
