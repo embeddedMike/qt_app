@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <algorithm>
 #include <nlohmann/json.hpp>
+#include <thread>
 #include <vector>
 
 static const QString path = "/Users/mike/qt_app/json_data.db";
@@ -53,12 +54,16 @@ const QString weatherTable =
     "INT, temp text NOT NULL, pressure text, humidity text, wind text, FOREIGN "
     "KEY(location_id) REFERENCES locations(id));";
 
+void hello() { std::cout << "thread test" << std::endl; }
+
 int main(int argc, char *argv[]) {
 
   QApplication a(argc, argv);
   MainWindow w;
   w.show();
 
+  std::thread t(hello);
+  t.join();
   JsonApi instance(urlAllStations);
   instance.initCurl();
   instance.configureCurl();

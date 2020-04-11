@@ -1,6 +1,6 @@
 QT       += core gui sql
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets #printsupport
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17 force_debug_info
 
@@ -20,15 +20,15 @@ SOURCES += \
     src/JsonParser.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/DbManager.cpp
-    #qcustomplot.cpp
+    src/DbManager.cpp \
+    src/qcustomplot.cpp
 
 HEADERS += \
     inc/JsonApi.hpp \
     inc/JsonParser.hpp \
     inc/mainwindow.h \
-    inc/DbManager.hpp
-    #qcustomplot.h
+    inc/DbManager.hpp \
+    inc/qcustomplot.h
 
 
 INCLUDEPATH += /usr/local/include \
