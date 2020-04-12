@@ -32,27 +32,25 @@ std::array<const std::string, 8> stationNames{
 
 // http://api.openweathermap.org/data/2.5/weather?q=Krakow&appid=7ece3f05a22be77f9007d7513f44468a
 
-const QString locationsTable = "CREATE TABLE IF NOT EXISTS locations(id "
-                               "integer PRIMARY KEY,name text NOT NULL);";
-const QString sensorsTable =
-    "CREATE TABLE IF NOT EXISTS sensors(id INTEGER PRIMARY KEY,location_id INT "
-    "NOT NULL, param_code TEXT, FOREIGN KEY (location_id) REFERENCES "
-    "locations(id));";
+const QString locationsTable =
+    "CREATE TABLE IF NOT EXISTS locations(station_id INT PRIMARY KEY NOT "
+    "NULL,name TEXT);";
+const QString sensorsTable = "CREATE TABLE IF NOT EXISTS sensors(sensor_id INT "
+                             "PRIMARY KEY NOT NULL,station_id INT REFERENCES "
+                             "locations(station_id), param_code TEXT);";
 
 const QString readingsTable =
-    "CREATE TABLE IF NOT EXISTS readings(id integer PRIMARY KEY,sensor_id INT "
-    "NOT NULL, timestamp TEXT, value FLOAT, FOREIGN KEY(sensor_id) REFERENCES "
-    "sensors(id));";
+    "CREATE TABLE IF NOT EXISTS readings(sensor_id INT REFERENCES "
+    "sensors(sensor_id), timestamp TEXT, value FLOAT);";
 
 const QString airQualityTable =
-    "CREATE TABLE IF NOT EXISTS airquality(id integer PRIMARY KEY,location_id "
-    "INT, qualityIndex text NOT NULL, FOREIGN KEY(location_id) REFERENCES "
-    "locations(id));";
+    "CREATE TABLE IF NOT EXISTS airquality(station_id INT REFERENCES "
+    "locations(station_id), timestamp TEXT, qualityIndex TEXT);";
 
 const QString weatherTable =
-    "CREATE TABLE IF NOT EXISTS weather(id integer PRIMARY KEY,location_id "
-    "INT, temp text NOT NULL, pressure text, humidity text, wind text, FOREIGN "
-    "KEY(location_id) REFERENCES locations(id));";
+    "CREATE TABLE IF NOT EXISTS weather(location_id INT NOT NULL REFERENCES "
+    "locations(station_id),timestamp TEXT, temp FLOAT, pressure INT, humidity "
+    "INT, wind FLOAT);";
 
 void hello() { std::cout << "thread test" << std::endl; }
 
@@ -114,6 +112,6 @@ int main(int argc, char *argv[]) {
   db.createTable(weatherTable);
   db.addStationName(stationName);
   db.printAllLocations();
-  db.removeAllLocations();
+  // db.removeAllLocations();
   return a.exec();
 }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <regex>
+#include <set>
 #include <string>
 using json = nlohmann::json;
 
@@ -11,6 +12,8 @@ class JsonParser {
 private:
   std::string _urlResponse;
   std::map<int, std::string> _stationNameAndIds;
+  std::map<int, std::set<int>> _stationIdAndSensorIds;
+  std::map<int, std::set<std::string>> _sensorIdAndParamCode;
 
 public:
   JsonParser() = delete;
