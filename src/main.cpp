@@ -19,7 +19,7 @@ const std::string
 const std::string
     urlSensors("http://api.gios.gov.pl/pjp-api/rest/station/sensors/401");
 const std::string
-    urlSensorData("http://api.gios.gov.pl/pjp-api/rest/data/getData/401");
+    urlSensorData("http://api.gios.gov.pl/pjp-api/rest/data/getData/2766");
 const std::string
     urlAir("http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/401");
 const std::string
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
   std::thread t(hello);
   t.join();
-  JsonApi instance(urlSensors);
+  JsonApi instance(urlSensorData);
   instance.initCurl();
   instance.configureCurl();
   instance.performCurl();
@@ -103,12 +103,17 @@ int main(int argc, char *argv[]) {
 
   JsonParser instanceJsonApi(instance.getHttpData());
   json j = json::parse(instance.getHttpData());
-  std::cout << j[0]["param"]["paramCode"] << std::endl;
+
+  // std::cout << j["values"][0] << std::endl;
+  // std::cout << j["values"][0]["date"] << std::endl;
+  // std::cout << j["values"][0]["value"] << std::endl;
 
   // instanceJsonApi.getStationNamesAndIds();
   // instanceJsonApi.printStationNamesAndIds();
-  instanceJsonApi.getSensorIdAndParamCode();
-  instanceJsonApi.printSensorIdAndParamCode();
+  // instanceJsonApi.getSensorIdAndParamCode();
+  // instanceJsonApi.printSensorIdAndParamCode();
+  instanceJsonApi.getSensorRead();
+  // instanceJsonApi.printSensorRead();
 
   DbManager db(path);
   QSqlQuery query;

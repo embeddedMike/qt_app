@@ -13,6 +13,7 @@ private:
   std::string _urlResponse;
   std::map<int, std::string> _stationNameAndIds;
   std::map<int, std::string> _sensorIdWithParamCode;
+  std::pair<std::string, float> _sensorRead;
 
 public:
   JsonParser() = delete;
@@ -21,6 +22,8 @@ public:
   void setUrlResponse(std::string urlResponse);
   void printStationNamesAndIds();
   void printSensorIdAndParamCode();
+  void printSensorRead();
   void getStationNamesAndIds();
   void getSensorIdAndParamCode();
+  void getSensorRead();
 };
