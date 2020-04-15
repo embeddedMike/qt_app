@@ -12,8 +12,7 @@ class JsonParser {
 private:
   std::string _urlResponse;
   std::map<int, std::string> _stationNameAndIds;
-  std::map<int, std::set<int>> _stationIdAndSensorIds;
-  std::map<int, std::set<std::string>> _sensorIdAndParamCode;
+  std::map<int, std::string> _sensorIdWithParamCode;
 
 public:
   JsonParser() = delete;
@@ -21,5 +20,7 @@ public:
   std::string getUrlResponse();
   void setUrlResponse(std::string urlResponse);
   void printStationNamesAndIds();
+  void printSensorIdAndParamCode();
   void getStationNamesAndIds();
+  void getSensorIdAndParamCode();
 };

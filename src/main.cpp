@@ -15,6 +15,9 @@ static const QString path = "/Users/mike/qt_app/json_data.db";
 
 const std::string
     urlAllStations("http://api.gios.gov.pl/pjp-api/rest/station/findAll");
+
+const std::string
+    urlSensors("http://api.gios.gov.pl/pjp-api/rest/station/sensors/401");
 const std::string
     urlSensorData("http://api.gios.gov.pl/pjp-api/rest/data/getData/401");
 const std::string
@@ -62,12 +65,12 @@ int main(int argc, char *argv[]) {
 
   std::thread t(hello);
   t.join();
-  JsonApi instance(urlAllStations);
+  JsonApi instance(urlSensors);
   instance.initCurl();
   instance.configureCurl();
   instance.performCurl();
   instance.cleanupCurl();
-  // std::cout << instance.getHttpData() << std::endl;
+  std::cout << instance.getHttpData() << std::endl;
   /*
   using json = nlohmann::json;
   json j_complete = instance.getHttpData();
@@ -99,8 +102,13 @@ int main(int argc, char *argv[]) {
   std::cout << "SQLITE_OK" << result << std::endl;
 
   JsonParser instanceJsonApi(instance.getHttpData());
-  instanceJsonApi.getStationNamesAndIds();
-  instanceJsonApi.printStationNamesAndIds();
+  json j = json::parse(instance.getHttpData());
+  std::cout << j[0]["param"]["paramCode"] << std::endl;
+
+  // instanceJsonApi.getStationNamesAndIds();
+  // instanceJsonApi.printStationNamesAndIds();
+  instanceJsonApi.getSensorIdAndParamCode();
+  instanceJsonApi.printSensorIdAndParamCode();
 
   DbManager db(path);
   QSqlQuery query;
