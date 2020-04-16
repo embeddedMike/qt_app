@@ -14,6 +14,7 @@ private:
   std::map<int, std::string> _stationNameAndIds;
   std::map<int, std::string> _sensorIdWithParamCode;
   std::pair<std::string, float> _sensorRead;
+  std::pair<std::string, std::string> _stationAirQuality;
 
 public:
   JsonParser() = delete;
@@ -23,7 +24,9 @@ public:
   void printStationNamesAndIds();
   void printSensorIdAndParamCode();
   void printSensorRead();
+  void printStationAirQuality();
   void getStationNamesAndIds();
   void getSensorIdAndParamCode();
   void getSensorRead();
+  void getStationAirQuality();
 };

@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
   std::thread t(hello);
   t.join();
-  JsonApi instance(urlSensorData);
+  JsonApi instance(urlAir);
   instance.initCurl();
   instance.configureCurl();
   instance.performCurl();
@@ -104,16 +104,18 @@ int main(int argc, char *argv[]) {
   JsonParser instanceJsonApi(instance.getHttpData());
   json j = json::parse(instance.getHttpData());
 
-  // std::cout << j["values"][0] << std::endl;
-  // std::cout << j["values"][0]["date"] << std::endl;
+  // std::cout << j["stCalcDate"] << std::endl;
+  // std::cout << j["stIndexLevel"]["indexLevelName"] << std::endl;
   // std::cout << j["values"][0]["value"] << std::endl;
 
   // instanceJsonApi.getStationNamesAndIds();
   // instanceJsonApi.printStationNamesAndIds();
   // instanceJsonApi.getSensorIdAndParamCode();
   // instanceJsonApi.printSensorIdAndParamCode();
-  instanceJsonApi.getSensorRead();
+  // instanceJsonApi.getSensorRead();
   // instanceJsonApi.printSensorRead();
+  instanceJsonApi.getStationAirQuality();
+  instanceJsonApi.printStationAirQuality();
 
   DbManager db(path);
   QSqlQuery query;

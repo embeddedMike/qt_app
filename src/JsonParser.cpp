@@ -21,6 +21,11 @@ void JsonParser::printSensorRead() {
   std::cout << _sensorRead.first << " | " << _sensorRead.second << std::endl;
 }
 
+void JsonParser::printStationAirQuality() {
+  std::cout << _stationAirQuality.first << " | " << _stationAirQuality.second
+            << std::endl;
+}
+
 void JsonParser::getStationNamesAndIds() {
   json j = json::parse(_urlResponse);
   std::regex e("(Kraków)(.*)");
@@ -45,5 +50,11 @@ void JsonParser::getSensorIdAndParamCode() {
 
 void JsonParser::getSensorRead() {
   json j = json::parse(_urlResponse);
-  _sensorRead = std::make_pair(j["values"][0]["date"], j["values"][0]["value"]);
+  _sensorRead = std::make_pair(j["values"][1]["date"], j["values"][1]["value"]);
+}
+
+void JsonParser::getStationAirQuality() {
+  json j = json::parse(_urlResponse);
+  _stationAirQuality =
+      std::make_pair(j["stCalcDate"], j["stIndexLevel"]["indexLevelName"]);
 }
