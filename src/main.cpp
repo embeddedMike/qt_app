@@ -24,7 +24,7 @@ const std::string
     urlAir("http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/401");
 const std::string
     urlWeather("http://api.openweathermap.org/data/2.5/"
-               "weather?q=London,uk&APPID=7ece3f05a22be77f9007d7513f44468a");
+               "weather?q=Krakow&appid=7ece3f05a22be77f9007d7513f44468a");
 
 std::array<const std::string, 8> stationNames{
     "Kraków, Aleja Krasińskiego", "Kraków, ul. Bujaka",
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
   std::thread t(hello);
   t.join();
-  JsonApi instance(urlAir);
+  JsonApi instance(urlWeather);
   instance.initCurl();
   instance.configureCurl();
   instance.performCurl();
@@ -104,8 +104,8 @@ int main(int argc, char *argv[]) {
   JsonParser instanceJsonApi(instance.getHttpData());
   json j = json::parse(instance.getHttpData());
 
-  // std::cout << j["stCalcDate"] << std::endl;
-  // std::cout << j["stIndexLevel"]["indexLevelName"] << std::endl;
+  std::cout << j << std::endl;
+  std::cout << j["main"]["temp"] << std::endl;
   // std::cout << j["values"][0]["value"] << std::endl;
 
   // instanceJsonApi.getStationNamesAndIds();
@@ -114,8 +114,13 @@ int main(int argc, char *argv[]) {
   // instanceJsonApi.printSensorIdAndParamCode();
   // instanceJsonApi.getSensorRead();
   // instanceJsonApi.printSensorRead();
-  instanceJsonApi.getStationAirQuality();
-  instanceJsonApi.printStationAirQuality();
+  // instanceJsonApi.getStationAirQuality();
+  // instanceJsonApi.printStationAirQuality();
+  instanceJsonApi.fetchCracowId();
+  instanceJsonApi.printCityId();
+  instanceJsonApi.fetchWeatherData();
+  std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
+  instanceJsonApi.printWeatherData();
 
   DbManager db(path);
   QSqlQuery query;

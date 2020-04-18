@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     src/JsonApi.cpp \
     src/JsonParser.cpp \
+    src/WeatherData.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/DbManager.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 HEADERS += \
     inc/JsonApi.hpp \
     inc/JsonParser.hpp \
+    inc/WeatherData.hpp \
     inc/mainwindow.h \
     inc/DbManager.hpp \
     inc/qcustomplot.h
