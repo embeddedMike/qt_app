@@ -37,7 +37,7 @@ void JsonParser::printWeatherData() {
             << std::endl;
 }
 
-void JsonParser::getStationNamesAndIds() {
+void JsonParser::fetchStationNamesAndIds() {
   json j = json::parse(_urlResponse);
   std::regex e("(Kraków)(.*)");
   for (json::iterator it = j.begin(); it != j.end(); ++it) {
@@ -50,7 +50,7 @@ void JsonParser::getStationNamesAndIds() {
   }
 }
 
-void JsonParser::getSensorIdAndParamCode() {
+void JsonParser::fetchSensorIdAndParamCode() {
   json j = json::parse(_urlResponse);
   for (json::iterator it = j.begin(); it != j.end(); ++it) {
     std::pair sensorIdAndParamCode =
@@ -59,12 +59,12 @@ void JsonParser::getSensorIdAndParamCode() {
   }
 }
 
-void JsonParser::getSensorRead() {
+void JsonParser::fetchSensorRead() {
   json j = json::parse(_urlResponse);
   _sensorRead = std::make_pair(j["values"][1]["date"], j["values"][1]["value"]);
 }
 
-void JsonParser::getStationAirQuality() {
+void JsonParser::fetchStationAirQuality() {
   json j = json::parse(_urlResponse);
   _stationAirQuality =
       std::make_pair(j["stCalcDate"], j["stIndexLevel"]["indexLevelName"]);

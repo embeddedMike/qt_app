@@ -33,10 +33,10 @@ public:
   void printStationAirQuality();
   void printCityId();
   void printWeatherData();
-  void getStationNamesAndIds();
-  void getSensorIdAndParamCode();
-  void getSensorRead();
-  void getStationAirQuality();
+  void fetchStationNamesAndIds();
+  void fetchSensorIdAndParamCode();
+  void fetchSensorRead();
+  void fetchStationAirQuality();
   void fetchCracowId();
   void fetchWeatherData();
 };
