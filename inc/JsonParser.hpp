@@ -1,4 +1,5 @@
 #pragma once
+#include "inc/WeatherData.hpp"
 #include "nlohmann/json.hpp"
 #include <QString>
 #include <iostream>
@@ -11,15 +12,31 @@ using json = nlohmann::json;
 class JsonParser {
 private:
   std::string _urlResponse;
+  int _cityId;
+  WeatherData *_weatherData;
   std::map<int, std::string> _stationNameAndIds;
-  std::map<int, std::set<int>> _stationIdAndSensorIds;
-  std::map<int, std::set<std::string>> _sensorIdAndParamCode;
+  std::map<int, std::string> _sensorIdWithParamCode;
+  std::pair<std::string, float> _sensorRead;
+  std::pair<std::string, std::string> _stationAirQuality;
 
 public:
-  JsonParser() = delete;
-  JsonParser(std::string urlResponse) : _urlResponse(urlResponse) {}
+  JsonParser(std::string urlResponse) : _urlResponse(urlResponse) {
+    _weatherData = new WeatherData();
+  }
+  ~JsonParser() { delete _weatherData; }
+  WeatherData *getWeatherDataHandler();
   std::string getUrlResponse();
   void setUrlResponse(std::string urlResponse);
   void printStationNamesAndIds();
-  void getStationNamesAndIds();
+  void printSensorIdAndParamCode();
+  void printSensorRead();
+  void printStationAirQuality();
+  void printCityId();
+  void printWeatherData();
+  void fetchStationNamesAndIds();
+  void fetchSensorIdAndParamCode();
+  void fetchSensorRead();
+  void fetchStationAirQuality();
+  void fetchCracowId();
+  void fetchWeatherData();
 };

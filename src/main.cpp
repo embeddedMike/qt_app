@@ -15,13 +15,16 @@ static const QString path = "/Users/mike/qt_app/json_data.db";
 
 const std::string
     urlAllStations("http://api.gios.gov.pl/pjp-api/rest/station/findAll");
+
 const std::string
-    urlSensorData("http://api.gios.gov.pl/pjp-api/rest/data/getData/401");
+    urlSensors("http://api.gios.gov.pl/pjp-api/rest/station/sensors/401");
+const std::string
+    urlSensorData("http://api.gios.gov.pl/pjp-api/rest/data/getData/2766");
 const std::string
     urlAir("http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/401");
 const std::string
     urlWeather("http://api.openweathermap.org/data/2.5/"
-               "weather?q=London,uk&APPID=7ece3f05a22be77f9007d7513f44468a");
+               "weather?q=Krakow&appid=7ece3f05a22be77f9007d7513f44468a");
 
 std::array<const std::string, 8> stationNames{
     "Kraków, Aleja Krasińskiego", "Kraków, ul. Bujaka",
@@ -62,12 +65,12 @@ int main(int argc, char *argv[]) {
 
   std::thread t(hello);
   t.join();
-  JsonApi instance(urlAllStations);
+  JsonApi instance(urlWeather);
   instance.initCurl();
   instance.configureCurl();
   instance.performCurl();
   instance.cleanupCurl();
-  // std::cout << instance.getHttpData() << std::endl;
+  std::cout << instance.getHttpData() << std::endl;
   /*
   using json = nlohmann::json;
   json j_complete = instance.getHttpData();
@@ -99,8 +102,25 @@ int main(int argc, char *argv[]) {
   std::cout << "SQLITE_OK" << result << std::endl;
 
   JsonParser instanceJsonApi(instance.getHttpData());
-  instanceJsonApi.getStationNamesAndIds();
-  instanceJsonApi.printStationNamesAndIds();
+  json j = json::parse(instance.getHttpData());
+
+  std::cout << j << std::endl;
+  std::cout << j["main"]["temp"] << std::endl;
+  // std::cout << j["values"][0]["value"] << std::endl;
+
+  // instanceJsonApi.getStationNamesAndIds();
+  // instanceJsonApi.printStationNamesAndIds();
+  // instanceJsonApi.getSensorIdAndParamCode();
+  // instanceJsonApi.printSensorIdAndParamCode();
+  // instanceJsonApi.getSensorRead();
+  // instanceJsonApi.printSensorRead();
+  // instanceJsonApi.getStationAirQuality();
+  // instanceJsonApi.printStationAirQuality();
+  instanceJsonApi.fetchCracowId();
+  instanceJsonApi.printCityId();
+  instanceJsonApi.fetchWeatherData();
+  std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
+  instanceJsonApi.printWeatherData();
 
   DbManager db(path);
   QSqlQuery query;
