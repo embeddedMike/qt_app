@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
   std::thread t(hello);
   t.join();
-  JsonApi instance(urlWeather);
+  JsonApi instance(urlAllStations);
   instance.initCurl();
   instance.configureCurl();
   instance.performCurl();
@@ -104,34 +104,36 @@ int main(int argc, char *argv[]) {
   JsonParser instanceJsonApi(instance.getHttpData());
   json j = json::parse(instance.getHttpData());
 
-  std::cout << j << std::endl;
-  std::cout << j["main"]["temp"] << std::endl;
+  // std::cout << j << std::endl;
+  // std::cout << j["main"]["temp"] << std::endl;
   // std::cout << j["values"][0]["value"] << std::endl;
 
-  // instanceJsonApi.getStationNamesAndIds();
-  // instanceJsonApi.printStationNamesAndIds();
+  instanceJsonApi.fetchStationNamesAndIds();
+  instanceJsonApi.printStationNamesAndIds();
   // instanceJsonApi.getSensorIdAndParamCode();
   // instanceJsonApi.printSensorIdAndParamCode();
   // instanceJsonApi.getSensorRead();
   // instanceJsonApi.printSensorRead();
   // instanceJsonApi.getStationAirQuality();
   // instanceJsonApi.printStationAirQuality();
-  instanceJsonApi.fetchCracowId();
-  instanceJsonApi.printCityId();
-  instanceJsonApi.fetchWeatherData();
-  std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
-  instanceJsonApi.printWeatherData();
+  // instanceJsonApi.fetchCracowId();
+  // instanceJsonApi.printCityId();
+  // instanceJsonApi.fetchWeatherData();
+  // std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
+  // instanceJsonApi.printWeatherData();
 
   DbManager db(path);
   QSqlQuery query;
+  int test = 77;
   QString stationName = "testaas";
   db.createTable(locationsTable);
   db.createTable(sensorsTable);
   db.createTable(readingsTable);
   db.createTable(airQualityTable);
   db.createTable(weatherTable);
-  db.addStationName(stationName);
+  // db.addStationName(stationName);
+  db.addLocations(test, stationName);
   db.printAllLocations();
-  // db.removeAllLocations();
+  db.removeAllLocations();
   return a.exec();
 }
