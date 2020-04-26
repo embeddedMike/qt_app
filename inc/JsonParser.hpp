@@ -1,6 +1,7 @@
 #pragma once
 #include "inc/WeatherData.hpp"
 #include "nlohmann/json.hpp"
+#include <QDebug>
 #include <QString>
 #include <iostream>
 #include <map>
@@ -26,6 +27,8 @@ public:
   ~JsonParser() { delete _weatherData; }
   WeatherData *getWeatherDataHandler();
   std::string getUrlResponse();
+  std::map<int, std::string> getStationNameAndIds();
+  std::map<int, std::string> getSensorIdWithParamCode();
   void setUrlResponse(std::string urlResponse);
   void printStationNamesAndIds();
   void printSensorIdAndParamCode();

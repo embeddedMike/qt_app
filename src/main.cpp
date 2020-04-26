@@ -15,25 +15,15 @@ static const QString path = "/Users/mike/qt_app/json_data.db";
 
 const std::string
     urlAllStations("http://api.gios.gov.pl/pjp-api/rest/station/findAll");
-
 const std::string
-    urlSensors("http://api.gios.gov.pl/pjp-api/rest/station/sensors/401");
+    urlSensors("http://api.gios.gov.pl/pjp-api/rest/station/sensors/");
 const std::string
-    urlSensorData("http://api.gios.gov.pl/pjp-api/rest/data/getData/2766");
+    urlSensorData("http://api.gios.gov.pl/pjp-api/rest/data/getData/");
 const std::string
-    urlAir("http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/401");
+    urlAir("http://api.gios.gov.pl/pjp-api/rest/aqindex/getIndex/");
 const std::string
     urlWeather("http://api.openweathermap.org/data/2.5/"
                "weather?q=Krakow&appid=7ece3f05a22be77f9007d7513f44468a");
-
-std::array<const std::string, 8> stationNames{
-    "Kraków, Aleja Krasińskiego", "Kraków, ul. Bujaka",
-    "Kraków, ul. Bulwarowa",      "Kraków, ul. Dietla",
-    "Kraków, ul. Złoty Róg",      "Kraków, os. Piastów",
-    "Kraków, os. Wadów",          "Kraków, os. Swoszowice"};
-// std::array<const int,8> {400,401,402,10121,10123,10139,10447,11303}
-
-// http://api.openweathermap.org/data/2.5/weather?q=Krakow&appid=7ece3f05a22be77f9007d7513f44468a
 
 const QString locationsTable =
     "CREATE TABLE IF NOT EXISTS locations(station_id INT PRIMARY KEY NOT "
@@ -70,57 +60,63 @@ int main(int argc, char *argv[]) {
   instance.configureCurl();
   instance.performCurl();
   instance.cleanupCurl();
-  std::cout << instance.getHttpData() << std::endl;
-  /*
-  using json = nlohmann::json;
-  json j_complete = instance.getHttpData();
-  json j = json::parse(instance.getHttpData());
-  if (j.is_array()) {
-    std::cout << "to tablica" << std::endl;
-  }
-  if (j.is_string()) {
-    std::cout << "to string" << std::endl;
-  }
-  std::cout << j[0]["addressStreet"] << std::endl;
-  for (const auto &item : j) {
-    if (item["stationName"] == "Kraków, Aleja Krasińskiego") {
-      std::cout << item["id"] << std::endl;
-    }
-  }
-  */
-  // std::cout << j_complete["Wrocław - Wiśniowa"] << std::endl;
-  // std::cout << j_complete[0] << std::endl;
-  // JsonParser instanceJsonApi(instance.getHttpData());
-  // std::cout << instanceJsonApi.getUrlResponse() << std::endl;
-
-  sqlite3 *connection = nullptr;
-  int result = sqlite3_open("/Users/mike/qt_app/json_data.db", &connection);
-  if (SQLITE_OK != result) {
-    std::cout << "Error" << std::endl;
-    sqlite3_close(connection);
-  }
-  std::cout << "SQLITE_OK" << result << std::endl;
 
   JsonParser instanceJsonApi(instance.getHttpData());
-  json j = json::parse(instance.getHttpData());
-
-  // std::cout << j << std::endl;
-  // std::cout << j["main"]["temp"] << std::endl;
-  // std::cout << j["values"][0]["value"] << std::endl;
-
   instanceJsonApi.fetchStationNamesAndIds();
   instanceJsonApi.printStationNamesAndIds();
-  // instanceJsonApi.getSensorIdAndParamCode();
-  // instanceJsonApi.printSensorIdAndParamCode();
-  // instanceJsonApi.getSensorRead();
-  // instanceJsonApi.printSensorRead();
-  // instanceJsonApi.getStationAirQuality();
-  // instanceJsonApi.printStationAirQuality();
-  // instanceJsonApi.fetchCracowId();
-  // instanceJsonApi.printCityId();
-  // instanceJsonApi.fetchWeatherData();
-  // std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
-  // instanceJsonApi.printWeatherData();
+
+  for (const auto &[id, station] : instanceJsonApi.getStationNameAndIds()) {
+    std::string url("");
+    url.assign(urlSensors + std::to_string(id));
+    instance.setUrl(url);
+    instance.initCurl();
+    instance.configureCurl();
+    instance.performCurl();
+    instance.cleanupCurl();
+    instanceJsonApi.setUrlResponse(instance.getHttpData());
+    instanceJsonApi.fetchSensorIdAndParamCode();
+    instanceJsonApi.printSensorIdAndParamCode();
+    url.clear();
+  }
+
+  for (const auto &[id, paramCode] :
+       instanceJsonApi.getSensorIdWithParamCode()) {
+    std::string url("");
+    url.assign(urlSensorData + std::to_string(id));
+    instance.setUrl(url);
+    instance.initCurl();
+    instance.configureCurl();
+    instance.performCurl();
+    instance.cleanupCurl();
+    instanceJsonApi.setUrlResponse(instance.getHttpData());
+    instanceJsonApi.fetchSensorRead();
+    instanceJsonApi.printSensorRead();
+    url.clear();
+  }
+  for (const auto &[id, station] : instanceJsonApi.getStationNameAndIds()) {
+    std::string url("");
+    url.assign(urlAir + std::to_string(id));
+    instance.setUrl(url);
+    instance.initCurl();
+    instance.configureCurl();
+    instance.performCurl();
+    instance.cleanupCurl();
+    instanceJsonApi.setUrlResponse(instance.getHttpData());
+    instanceJsonApi.fetchStationAirQuality();
+    instanceJsonApi.printStationAirQuality();
+  }
+
+  instance.setUrl(urlWeather);
+  instance.initCurl();
+  instance.configureCurl();
+  instance.performCurl();
+  instance.cleanupCurl();
+  instanceJsonApi.setUrlResponse(instance.getHttpData());
+  instanceJsonApi.fetchCracowId();
+  instanceJsonApi.printCityId();
+  instanceJsonApi.fetchWeatherData();
+  std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
+  instanceJsonApi.printWeatherData();
 
   DbManager db(path);
   QSqlQuery query;
