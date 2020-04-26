@@ -53,8 +53,18 @@ int main(int argc, char *argv[]) {
   MainWindow w;
   w.show();
 
-  std::thread t(hello);
-  t.join();
+  // std::thread t(hello);
+  // t.join();
+
+  DbManager db(path);
+  QSqlQuery query;
+
+  db.createTable(locationsTable);
+  db.createTable(sensorsTable);
+  db.createTable(readingsTable);
+  db.createTable(airQualityTable);
+  db.createTable(weatherTable);
+
   JsonApi instance(urlAllStations);
   instance.initCurl();
   instance.configureCurl();
@@ -64,6 +74,13 @@ int main(int argc, char *argv[]) {
   JsonParser instanceJsonApi(instance.getHttpData());
   instanceJsonApi.fetchStationNamesAndIds();
   instanceJsonApi.printStationNamesAndIds();
+
+  for (const auto &[id, station] : instanceJsonApi.getStationNameAndIds()) {
+    QString stationName = QString::fromLocal8Bit(station.c_str());
+    db.addLocations(id, stationName);
+  }
+
+  db.printAllLocations();
 
   for (const auto &[id, station] : instanceJsonApi.getStationNameAndIds()) {
     std::string url("");
@@ -115,21 +132,10 @@ int main(int argc, char *argv[]) {
   instanceJsonApi.fetchCracowId();
   instanceJsonApi.printCityId();
   instanceJsonApi.fetchWeatherData();
-  std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
+  // std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
   instanceJsonApi.printWeatherData();
 
-  DbManager db(path);
-  QSqlQuery query;
-  int test = 77;
-  QString stationName = "testaas";
-  db.createTable(locationsTable);
-  db.createTable(sensorsTable);
-  db.createTable(readingsTable);
-  db.createTable(airQualityTable);
-  db.createTable(weatherTable);
-  // db.addStationName(stationName);
-  db.addLocations(test, stationName);
-  db.printAllLocations();
   db.removeAllLocations();
+
   return a.exec();
 }
