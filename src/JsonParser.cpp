@@ -16,6 +16,10 @@ std::map<int, std::string> JsonParser::getSensorIdWithParamCodeBuffer() {
   return _sensorIdWithParamCodeBuffer;
 }
 
+std::pair<std::string, float> JsonParser::getSensorRead() {
+  return _sensorRead;
+}
+
 void JsonParser::clearSensorIdWithParamCodeBuffer() {
   _sensorIdWithParamCodeBuffer.clear();
 }

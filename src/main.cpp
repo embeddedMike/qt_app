@@ -132,6 +132,10 @@ int main(int argc, char *argv[]) {
     instanceJsonApi.setUrlResponse(instance.getHttpData());
     instanceJsonApi.fetchStationAirQuality();
     instanceJsonApi.printStationAirQuality();
+    QString fetchedTimestamp =
+        QString::fromLocal8Bit(instanceJsonApi.getSensorRead().first.c_str());
+    db.addReadings(id, fetchedTimestamp,
+                   instanceJsonApi.getSensorRead().second);
   }
 
   instance.setUrl(urlWeather);
