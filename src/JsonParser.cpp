@@ -20,6 +20,10 @@ std::pair<std::string, float> JsonParser::getSensorRead() {
   return _sensorRead;
 }
 
+std::pair<std::string, std::string> JsonParser::getStationAirQuality() {
+  return _stationAirQuality;
+}
+
 void JsonParser::clearSensorIdWithParamCodeBuffer() {
   _sensorIdWithParamCodeBuffer.clear();
 }

@@ -98,14 +98,14 @@ bool DbManager::addReadings(int sensorId, QString &timestampValue,
   return success;
 }
 bool DbManager::addAirQuality(int stationId, QString &timestampValue,
-                              QString qualityIndex) {
+                              QString &qualityIndex) {
   bool success = false;
   QSqlQuery query;
 
   if (m_db.open()) {
     qDebug() << "Database is open";
   }
-  query.prepare("INSERT INTO airquality (station_id, timestamp, param_code) "
+  query.prepare("INSERT INTO airquality (station_id, timestamp, qualityIndex) "
                 "VALUES (?, ?, ?);");
   query.addBindValue(stationId);
   query.addBindValue(timestampValue);

@@ -32,6 +32,7 @@ public:
   std::map<int, std::string> getSensorIdWithParamCode();
   std::map<int, std::string> getSensorIdWithParamCodeBuffer();
   std::pair<std::string, float> getSensorRead();
+  std::pair<std::string, std::string> getStationAirQuality();
   void clearSensorIdWithParamCodeBuffer();
   void setUrlResponse(std::string urlResponse);
   void printStationNamesAndIds();

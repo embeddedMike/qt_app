@@ -119,6 +119,10 @@ int main(int argc, char *argv[]) {
     instanceJsonApi.setUrlResponse(instance.getHttpData());
     instanceJsonApi.fetchSensorRead();
     instanceJsonApi.printSensorRead();
+    QString fetchedTimestamp =
+        QString::fromLocal8Bit(instanceJsonApi.getSensorRead().first.c_str());
+    db.addReadings(id, fetchedTimestamp,
+                   instanceJsonApi.getSensorRead().second);
     url.clear();
   }
   for (const auto &[id, station] : instanceJsonApi.getStationNameAndIds()) {
@@ -132,10 +136,12 @@ int main(int argc, char *argv[]) {
     instanceJsonApi.setUrlResponse(instance.getHttpData());
     instanceJsonApi.fetchStationAirQuality();
     instanceJsonApi.printStationAirQuality();
-    QString fetchedTimestamp =
-        QString::fromLocal8Bit(instanceJsonApi.getSensorRead().first.c_str());
-    db.addReadings(id, fetchedTimestamp,
-                   instanceJsonApi.getSensorRead().second);
+    QString fetchedTimestamp = QString::fromLocal8Bit(
+        instanceJsonApi.getStationAirQuality().first.c_str());
+    QString fetchedValue = QString::fromLocal8Bit(
+        instanceJsonApi.getStationAirQuality().second.c_str());
+    db.addAirQuality(id, fetchedTimestamp, fetchedValue);
+    url.clear();
   }
 
   instance.setUrl(urlWeather);

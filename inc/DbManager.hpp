@@ -14,7 +14,7 @@ public:
   bool addSensors(int sensorId, int stationId, QString &paramCode);
   bool addReadings(int sensorId, QString &timestampValue, float readingValue);
   bool addAirQuality(int stationId, QString &timestampValue,
-                     QString qualityIndex);
+                     QString &qualityIndex);
   bool addWeather(int locationId, WeatherData *weatherData);
   void printAllLocations();
   void printAllSensors();
