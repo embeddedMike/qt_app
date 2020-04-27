@@ -65,6 +65,9 @@ int main(int argc, char *argv[]) {
   db.createTable(airQualityTable);
   db.createTable(weatherTable);
 
+  db.removeAllSensors();
+  db.removeAllLocations();
+
   JsonApi instance(urlAllStations);
   instance.initCurl();
   instance.configureCurl();
@@ -84,6 +87,7 @@ int main(int argc, char *argv[]) {
 
   for (const auto &[id, station] : instanceJsonApi.getStationNameAndIds()) {
     std::string url("");
+
     url.assign(urlSensors + std::to_string(id));
     instance.setUrl(url);
     instance.initCurl();
@@ -93,6 +97,13 @@ int main(int argc, char *argv[]) {
     instanceJsonApi.setUrlResponse(instance.getHttpData());
     instanceJsonApi.fetchSensorIdAndParamCode();
     instanceJsonApi.printSensorIdAndParamCode();
+    instanceJsonApi.printSensorIdAndParamCodeBuffer();
+    for (const auto &[sensorId, paramCode] :
+         instanceJsonApi.getSensorIdWithParamCodeBuffer()) {
+      QString fetchedParamCode = QString::fromLocal8Bit(paramCode.c_str());
+      db.addSensors(sensorId, id, fetchedParamCode);
+    }
+    instanceJsonApi.clearSensorIdWithParamCodeBuffer();
     url.clear();
   }
 
@@ -135,7 +146,7 @@ int main(int argc, char *argv[]) {
   // std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
   instanceJsonApi.printWeatherData();
 
-  db.removeAllLocations();
+  // db.removeAllLocations();
 
   return a.exec();
 }

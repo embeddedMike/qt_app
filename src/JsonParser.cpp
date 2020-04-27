@@ -12,6 +12,14 @@ std::map<int, std::string> JsonParser::getSensorIdWithParamCode() {
   return _sensorIdWithParamCode;
 }
 
+std::map<int, std::string> JsonParser::getSensorIdWithParamCodeBuffer() {
+  return _sensorIdWithParamCodeBuffer;
+}
+
+void JsonParser::clearSensorIdWithParamCodeBuffer() {
+  _sensorIdWithParamCodeBuffer.clear();
+}
+
 void JsonParser::setUrlResponse(std::string urlResponse) {
   _urlResponse = urlResponse;
 }
@@ -24,6 +32,12 @@ void JsonParser::printStationNamesAndIds() {
 void JsonParser::printSensorIdAndParamCode() {
   for (const auto &[sensorId, paramCode] : _sensorIdWithParamCode) {
     std::cout << sensorId << " | " << paramCode << std::endl;
+  }
+}
+
+void JsonParser::printSensorIdAndParamCodeBuffer() {
+  for (const auto &[sensorId, paramCode] : _sensorIdWithParamCodeBuffer) {
+    std::cout << "Buffer:" << sensorId << " | " << paramCode << std::endl;
   }
 }
 
@@ -63,6 +77,7 @@ void JsonParser::fetchSensorIdAndParamCode() {
     std::pair sensorIdAndParamCode =
         std::make_pair((*it)["id"], (*it)["param"]["paramCode"]);
     _sensorIdWithParamCode.insert(sensorIdAndParamCode);
+    _sensorIdWithParamCodeBuffer.insert(sensorIdAndParamCode);
   }
 }
 

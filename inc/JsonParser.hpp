@@ -17,6 +17,7 @@ private:
   WeatherData *_weatherData;
   std::map<int, std::string> _stationNameAndIds;
   std::map<int, std::string> _sensorIdWithParamCode;
+  std::map<int, std::string> _sensorIdWithParamCodeBuffer;
   std::pair<std::string, float> _sensorRead;
   std::pair<std::string, std::string> _stationAirQuality;
 
@@ -29,9 +30,12 @@ public:
   std::string getUrlResponse();
   std::map<int, std::string> getStationNameAndIds();
   std::map<int, std::string> getSensorIdWithParamCode();
+  std::map<int, std::string> getSensorIdWithParamCodeBuffer();
+  void clearSensorIdWithParamCodeBuffer();
   void setUrlResponse(std::string urlResponse);
   void printStationNamesAndIds();
   void printSensorIdAndParamCode();
+  void printSensorIdAndParamCodeBuffer();
   void printSensorRead();
   void printStationAirQuality();
   void printCityId();

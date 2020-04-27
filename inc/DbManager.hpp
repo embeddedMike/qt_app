@@ -17,7 +17,9 @@ public:
                      QString qualityIndex);
   bool addWeather(int locationId, WeatherData *weatherData);
   void printAllLocations();
+  void printAllSensors();
   bool removeAllLocations();
+  bool removeAllSensors();
   ~DbManager();
 
 private:

@@ -67,7 +67,7 @@ bool DbManager::addSensors(int sensorId, int stationId, QString &paramCode) {
   }
   query.prepare("INSERT INTO sensors (sensor_id, station_id, param_code) "
                 "VALUES (?, ?, ?);");
-  query.addBindValue(stationId);
+  query.addBindValue(sensorId);
   query.addBindValue(stationId);
   query.addBindValue(paramCode);
   if (query.exec()) {
@@ -151,6 +151,16 @@ void DbManager::printAllLocations() {
   }
 }
 
+void DbManager::printAllSensors() {
+  qDebug() << "Values in db";
+  QSqlQuery query("SELECT * FROM sensors");
+  int idName = query.record().indexOf("name");
+  while (query.next()) {
+    QString name = query.value(idName).toString();
+    qDebug() << "===" << name;
+  }
+}
+
 bool DbManager::removeAllLocations() {
   bool success = false;
 
@@ -160,9 +170,23 @@ bool DbManager::removeAllLocations() {
   if (removeQuery.exec()) {
     success = true;
   } else {
-    qDebug() << "remove all persons failed: " << removeQuery.lastError();
+    qDebug() << "remove all locations failed: " << removeQuery.lastError();
   }
 
+  return success;
+}
+
+bool DbManager::removeAllSensors() {
+  bool success = false;
+
+  QSqlQuery removeQuery;
+  removeQuery.prepare("DELETE FROM sensors");
+
+  if (removeQuery.exec()) {
+    success = true;
+  } else {
+    qDebug() << "remove all sensors failed: " << removeQuery.lastError();
+  }
   return success;
 }
 
