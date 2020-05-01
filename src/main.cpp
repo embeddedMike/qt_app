@@ -7,6 +7,7 @@
 #include "gtest/gtest.h"
 #include <QApplication>
 #include <algorithm>
+#include <chrono>
 #include <nlohmann/json.hpp>
 #include <thread>
 #include <vector>
@@ -45,7 +46,14 @@ const QString weatherTable =
     "locations(station_id),timestamp TEXT, temp FLOAT, pressure INT, humidity "
     "INT, wind FLOAT);";
 
-void hello() { std::cout << "thread test" << std::endl; }
+void logData() {
+  std::cout << "Thread Test" << std::endl;
+  for (int i = 24; i > 0; --i) {
+    std::cout << i << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+  }
+  std::cout << "Lift off!" << std::endl;
+}
 
 int main(int argc, char *argv[]) {
 
@@ -53,8 +61,8 @@ int main(int argc, char *argv[]) {
   MainWindow w;
   w.show();
 
-  // std::thread t(hello);
-  // t.join();
+  std::thread t(logData);
+  t.detach();
 
   DbManager db(path);
   QSqlQuery query;
@@ -154,13 +162,10 @@ int main(int argc, char *argv[]) {
   instanceJsonApi.fetchCracowId();
   instanceJsonApi.printCityId();
   instanceJsonApi.fetchWeatherData();
-  // std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
   instanceJsonApi.printWeatherData();
   db.addLocations(instanceJsonApi.getCityId(), weatherCity);
   db.addWeather(instanceJsonApi.getCityId(),
                 instanceJsonApi.getWeatherDataHandler());
-
-  // db.removeAllLocations();
 
   return a.exec();
 }
