@@ -155,6 +155,8 @@ int main(int argc, char *argv[]) {
   instanceJsonApi.fetchWeatherData();
   // std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
   instanceJsonApi.printWeatherData();
+  db.addWeather(instanceJsonApi.getCityId(),
+                instanceJsonApi.getWeatherDataHandler());
 
   // db.removeAllLocations();
 

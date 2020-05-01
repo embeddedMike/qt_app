@@ -124,7 +124,7 @@ bool DbManager::addWeather(int locationId, WeatherData *weatherData) {
   if (m_db.open()) {
     qDebug() << "Database is open";
   }
-  query.prepare("INSERT INTO locations (location_id, timestamp, temp, "
+  query.prepare("INSERT INTO weather (location_id, timestamp, temp, "
                 "pressure, humidity, wind) "
                 "VALUES (?, ?, ?, ?, ?, ?);");
   query.addBindValue(locationId);

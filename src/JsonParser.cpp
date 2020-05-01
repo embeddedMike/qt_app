@@ -24,6 +24,8 @@ std::pair<std::string, std::string> JsonParser::getStationAirQuality() {
   return _stationAirQuality;
 }
 
+int JsonParser::getCityId() { return _cityId; }
+
 void JsonParser::clearSensorIdWithParamCodeBuffer() {
   _sensorIdWithParamCodeBuffer.clear();
 }
