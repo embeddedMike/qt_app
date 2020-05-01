@@ -190,6 +190,48 @@ bool DbManager::removeAllSensors() {
   return success;
 }
 
+bool DbManager::removeAllSensorReadings() {
+  bool success = false;
+
+  QSqlQuery removeQuery;
+  removeQuery.prepare("DELETE FROM sensors");
+
+  if (removeQuery.exec()) {
+    success = true;
+  } else {
+    qDebug() << "remove all sensors failed: " << removeQuery.lastError();
+  }
+  return success;
+}
+
+bool DbManager::removeAllAirQualityData() {
+  bool success = false;
+
+  QSqlQuery removeQuery;
+  removeQuery.prepare("DELETE FROM sensors");
+
+  if (removeQuery.exec()) {
+    success = true;
+  } else {
+    qDebug() << "remove all sensors failed: " << removeQuery.lastError();
+  }
+  return success;
+}
+
+bool DbManager::removeAllWeatherData() {
+  bool success = false;
+
+  QSqlQuery removeQuery;
+  removeQuery.prepare("DELETE FROM sensors");
+
+  if (removeQuery.exec()) {
+    success = true;
+  } else {
+    qDebug() << "remove all sensors failed: " << removeQuery.lastError();
+  }
+  return success;
+}
+
 DbManager::~DbManager() {
   if (m_db.isOpen()) {
     m_db.close();

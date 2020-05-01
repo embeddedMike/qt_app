@@ -20,6 +20,9 @@ public:
   void printAllSensors();
   bool removeAllLocations();
   bool removeAllSensors();
+  bool removeAllSensorReadings();
+  bool removeAllAirQualityData();
+  bool removeAllWeatherData();
   ~DbManager();
 
 private:
