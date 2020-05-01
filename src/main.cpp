@@ -144,6 +144,7 @@ int main(int argc, char *argv[]) {
     url.clear();
   }
 
+  QString weatherCity = "Kraków";
   instance.setUrl(urlWeather);
   instance.initCurl();
   instance.configureCurl();
@@ -155,6 +156,7 @@ int main(int argc, char *argv[]) {
   instanceJsonApi.fetchWeatherData();
   // std::cout << instanceJsonApi.getWeatherDataHandler()->wind << std::endl;
   instanceJsonApi.printWeatherData();
+  db.addLocations(instanceJsonApi.getCityId(), weatherCity);
   db.addWeather(instanceJsonApi.getCityId(),
                 instanceJsonApi.getWeatherDataHandler());
 
