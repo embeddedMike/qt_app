@@ -1,8 +1,8 @@
 #pragma once
-#include <string>
+#include <QString>
 class WeatherData {
 public:
-  std::string timestamp;
+  QString timestamp;
   float temperature;
   float wind;
   int pressure;

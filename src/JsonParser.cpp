@@ -4,6 +4,32 @@ std::string JsonParser::getUrlResponse() { return _urlResponse; }
 
 WeatherData *JsonParser::getWeatherDataHandler() { return _weatherData; }
 
+std::map<int, std::string> JsonParser::getStationNameAndIds() {
+  return _stationNameAndIds;
+}
+
+std::map<int, std::string> JsonParser::getSensorIdWithParamCode() {
+  return _sensorIdWithParamCode;
+}
+
+std::map<int, std::string> JsonParser::getSensorIdWithParamCodeBuffer() {
+  return _sensorIdWithParamCodeBuffer;
+}
+
+std::pair<std::string, float> JsonParser::getSensorRead() {
+  return _sensorRead;
+}
+
+std::pair<std::string, std::string> JsonParser::getStationAirQuality() {
+  return _stationAirQuality;
+}
+
+int JsonParser::getCityId() { return _cityId; }
+
+void JsonParser::clearSensorIdWithParamCodeBuffer() {
+  _sensorIdWithParamCodeBuffer.clear();
+}
+
 void JsonParser::setUrlResponse(std::string urlResponse) {
   _urlResponse = urlResponse;
 }
@@ -19,6 +45,12 @@ void JsonParser::printSensorIdAndParamCode() {
   }
 }
 
+void JsonParser::printSensorIdAndParamCodeBuffer() {
+  for (const auto &[sensorId, paramCode] : _sensorIdWithParamCodeBuffer) {
+    std::cout << "Buffer:" << sensorId << " | " << paramCode << std::endl;
+  }
+}
+
 void JsonParser::printSensorRead() {
   std::cout << _sensorRead.first << " | " << _sensorRead.second << std::endl;
 }
@@ -31,9 +63,8 @@ void JsonParser::printStationAirQuality() {
 void JsonParser::printCityId() { std::cout << _cityId << std::endl; }
 
 void JsonParser::printWeatherData() {
-  std::cout << _weatherData->timestamp << " | " << _weatherData->temperature
-            << " | " << _weatherData->pressure << " | "
-            << _weatherData->humidity << " | " << _weatherData->wind
+  std::cout << _weatherData->temperature << " | " << _weatherData->pressure
+            << " | " << _weatherData->humidity << " | " << _weatherData->wind
             << std::endl;
 }
 
@@ -56,12 +87,18 @@ void JsonParser::fetchSensorIdAndParamCode() {
     std::pair sensorIdAndParamCode =
         std::make_pair((*it)["id"], (*it)["param"]["paramCode"]);
     _sensorIdWithParamCode.insert(sensorIdAndParamCode);
+    _sensorIdWithParamCodeBuffer.insert(sensorIdAndParamCode);
   }
 }
 
 void JsonParser::fetchSensorRead() {
   json j = json::parse(_urlResponse);
-  _sensorRead = std::make_pair(j["values"][1]["date"], j["values"][1]["value"]);
+  if (j["values"][0]["value"].is_null()) {
+    _sensorRead = std::make_pair(j["values"][0]["date"], 0);
+  } else {
+    _sensorRead =
+        std::make_pair(j["values"][0]["date"], j["values"][0]["value"]);
+  }
 }
 
 void JsonParser::fetchStationAirQuality() {
