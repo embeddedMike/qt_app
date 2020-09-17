@@ -11,7 +11,7 @@ private:
   CURL *curl;
 
 public:
-  JsonApi() = delete;
+  JsonApi();
   JsonApi(std::string apiUrl) : _apiUrl(apiUrl) {}
   void initCurl();
   std::string getHttpData() { return _httpData; }

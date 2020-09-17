@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>910</width>
-    <height>549</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>330</y>
+      <y>540</y>
       <width>141</width>
       <height>24</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>370</y>
+      <y>580</y>
       <width>111</width>
       <height>16</height>
      </rect>
@@ -82,10 +82,10 @@
      <widget class="QCustomPlot" name="realTimePlot" native="true">
       <property name="geometry">
        <rect>
-        <x>100</x>
+        <x>20</x>
         <y>20</y>
-        <width>431</width>
-        <height>321</height>
+        <width>511</width>
+        <height>421</height>
        </rect>
       </property>
      </widget>
@@ -94,61 +94,21 @@
      <attribute name="title">
       <string>Bar Charts</string>
      </attribute>
-     <widget class="QCustomPlot" name="barPlot" native="true">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>10</y>
-        <width>431</width>
-        <height>321</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="statisticalChart">
      <attribute name="title">
       <string>Statistical Charts</string>
      </attribute>
-     <widget class="QCustomPlot" name="statisticPlot" native="true">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>10</y>
-        <width>431</width>
-        <height>341</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="weatherChart">
      <attribute name="title">
       <string>Weather Chart</string>
      </attribute>
-     <widget class="QCustomPlot" name="weatherPlot" native="true">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>10</y>
-        <width>421</width>
-        <height>341</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="airConditionChart">
      <attribute name="title">
       <string>Air Condition Chart</string>
      </attribute>
-     <widget class="QCustomPlot" name="airConditionPlot" native="true">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>10</y>
-        <width>431</width>
-        <height>331</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
    </widget>
    <widget class="QLCDNumber" name="secondSuspendedDustNumber">
@@ -325,19 +285,6 @@
      <string>Ciśnienie atmosferyczne</string>
     </property>
    </widget>
-   <widget class="QLabel" name="cloudyLabel">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>200</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Zachmurzenie</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="windSpeedLabel">
     <property name="geometry">
      <rect>
@@ -371,16 +318,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="cloudyValue">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>220</y>
-      <width>111</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -398,7 +335,7 @@
   <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
-   <header>/Users/mike/qt_app/inc/qcustomplot.h</header>
+   <header>/Users/mike/Projects/qt_app/inc/qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

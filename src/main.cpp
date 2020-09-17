@@ -4,7 +4,7 @@
 #include "inc/JsonParser.hpp"
 #include "inc/mainwindow.h"
 #include "sqlite3.h"
-#include "gtest/gtest.h"
+//#include "gtest/gtest.h"
 #include <QApplication>
 #include <algorithm>
 #include <chrono>
@@ -12,7 +12,7 @@
 #include <thread>
 #include <vector>
 
-static const QString path = "/Users/mike/qt_app/json_data.db";
+static const QString path = "/Users/mike/Projects/qt_app/json_data.db";
 
 const std::string
     urlAllStations("http://api.gios.gov.pl/pjp-api/rest/station/findAll");
@@ -46,13 +46,19 @@ const QString weatherTable =
     "locations(station_id),timestamp TEXT, temp FLOAT, pressure INT, humidity "
     "INT, wind FLOAT);";
 
-void logData() {
-  std::cout << "Thread Test" << std::endl;
-  for (int i = 24; i > 0; --i) {
-    std::cout << i << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+void logReadings(DbManager& db, JsonApi& jsonApiInstance, JsonParser& jsonParserInstance);
+void logAirQuality(DbManager& db, JsonApi& jsonApiInstance, JsonParser& jsonParserInstance);
+void logWeather(DbManager& db, JsonApi& jsonApiInstance, JsonParser& jsonParserInstance);
+
+void logData(JsonApi& jsonApiInstance, JsonParser& jsonParserInstance) {
+  std::cout << "Thread - Log Data" << std::endl;
+  DbManager db(path);
+  for ( ; ; ) {
+    logReadings(db, jsonApiInstance, jsonParserInstance);
+    logAirQuality(db, jsonApiInstance, jsonParserInstance);
+    logWeather(db, jsonApiInstance, jsonParserInstance);
+    std::this_thread::sleep_for(std::chrono::hours(1));
   }
-  std::cout << "Lift off!" << std::endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -61,8 +67,8 @@ int main(int argc, char *argv[]) {
   MainWindow w;
   w.show();
 
-  std::thread t(logData);
-  t.detach();
+
+
 
   DbManager db(path);
   QSqlQuery query;
@@ -114,7 +120,7 @@ int main(int argc, char *argv[]) {
     instanceJsonApi.clearSensorIdWithParamCodeBuffer();
     url.clear();
   }
-
+/*
   for (const auto &[id, paramCode] :
        instanceJsonApi.getSensorIdWithParamCode()) {
     std::string url("");
@@ -166,6 +172,86 @@ int main(int argc, char *argv[]) {
   db.addLocations(instanceJsonApi.getCityId(), weatherCity);
   db.addWeather(instanceJsonApi.getCityId(),
                 instanceJsonApi.getWeatherDataHandler());
+*/
+  //logReadings(db, instance, instanceJsonApi);
+  //logAirQuality(db, instance, instanceJsonApi);
+  //logWeather(db, instance, instanceJsonApi);
+  std::thread t{logData, std::ref(instance), std::ref(instanceJsonApi)};
+  t.detach();
 
   return a.exec();
+}
+
+void logReadings(DbManager& db, JsonApi& jsonApiInstance, JsonParser& jsonParserInstance)
+{
+    for (const auto &[id, paramCode] :
+         jsonParserInstance.getSensorIdWithParamCode()) {
+      std::string url("");
+      url.assign(urlSensorData + std::to_string(id));
+      jsonApiInstance.setUrl(url);
+      jsonApiInstance.initCurl();
+      jsonApiInstance.configureCurl();
+      jsonApiInstance.performCurl();
+      jsonApiInstance.cleanupCurl();
+      jsonParserInstance.setUrlResponse(jsonApiInstance.getHttpData());
+      jsonParserInstance.fetchSensorRead();
+      jsonParserInstance.printSensorRead();
+      QString fetchedTimestamp =
+          QString::fromLocal8Bit(jsonParserInstance.getSensorRead().first.c_str());
+      db.addReadings(id, fetchedTimestamp,
+                     jsonParserInstance.getSensorRead().second);
+      url.clear();
+    }
+}
+
+void logAirQuality(DbManager& db, JsonApi& jsonApiInstance, JsonParser& jsonParserInstance)
+{
+    for (const auto &[id, station] : jsonParserInstance.getStationNameAndIds()) {
+      std::string url("");
+      url.assign(urlAir + std::to_string(id));
+      jsonApiInstance.setUrl(url);
+      jsonApiInstance.initCurl();
+      jsonApiInstance.configureCurl();
+      jsonApiInstance.performCurl();
+      jsonApiInstance.cleanupCurl();
+      jsonParserInstance.setUrlResponse(jsonApiInstance.getHttpData());
+      jsonParserInstance.fetchStationAirQuality();
+      jsonParserInstance.printStationAirQuality();
+      QString fetchedTimestamp = QString::fromLocal8Bit(
+          jsonParserInstance.getStationAirQuality().first.c_str());
+      QString fetchedValue = QString::fromLocal8Bit(
+          jsonParserInstance.getStationAirQuality().second.c_str());
+      db.addAirQuality(id, fetchedTimestamp, fetchedValue);
+      url.clear();
+    }
+}
+
+void logWeather(DbManager& db, JsonApi& jsonApiInstance, JsonParser& jsonParserInstance)
+{
+    QString weatherCity = "Kraków";
+    static bool isLocationAdded = false;
+    jsonApiInstance.setUrl(urlWeather);
+    jsonApiInstance.initCurl();
+    jsonApiInstance.configureCurl();
+    jsonApiInstance.performCurl();
+    jsonApiInstance.cleanupCurl();
+    jsonParserInstance.setUrlResponse(jsonApiInstance.getHttpData());
+    jsonParserInstance.fetchCracowId();
+    jsonParserInstance.printCityId();
+    jsonParserInstance.fetchWeatherData();
+    jsonParserInstance.printWeatherData();
+    if(!isLocationAdded)
+    {
+        qDebug() << "first time";
+        db.addLocations(jsonParserInstance.getCityId(), weatherCity);
+        isLocationAdded = true;
+
+    }
+    else
+    {
+        qDebug() << "next time";
+    }
+    //db.addLocations(jsonParserInstance.getCityId(), weatherCity);
+    db.addWeather(jsonParserInstance.getCityId(),
+                  jsonParserInstance.getWeatherDataHandler());
 }

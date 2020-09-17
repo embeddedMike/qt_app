@@ -15,34 +15,94 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += \
-    src/JsonApi.cpp \
-    src/JsonParser.cpp \
-    src/WeatherData.cpp \
-    src/main.cpp \
-    src/mainwindow.cpp \
-    src/DbManager.cpp \
-    src/qcustomplot.cpp
+#message(Configuring test build...)
 
-HEADERS += \
-    inc/JsonApi.hpp \
-    inc/JsonParser.hpp \
-    inc/WeatherData.hpp \
-    inc/mainwindow.h \
-    inc/DbManager.hpp \
-    inc/qcustomplot.h
+#SOURCES += \
+#    src/JsonApi.cpp \
+#    src/JsonParser.cpp \
+#    src/WeatherData.cpp \
+#    src/main.cpp \
+#    src/mainwindow.cpp \
+#    src/DbManager.cpp \
+#    src/qcustomplot.cpp
 
+#HEADERS += \
+#    inc/JsonApi.hpp \
+#    inc/JsonParser.hpp \
+#    inc/WeatherData.hpp \
+#    inc/mainwindow.h \
+#    inc/DbManager.hpp \
+#    inc/qcustomplot.h
 
-INCLUDEPATH += /usr/local/include \
-               /usr/local/Cellar/nlohmann-json/3.7.3/include/
+test {
+    message(Test build)
+    QT += testlib
+    TARGET = UnitTests
 
-LIBS += -lcurl \
-        -lsqlite3
+    #SOURCES -= main.cpp
+
+    #HEADERS += test/testSuite1.h \
+    #   test/testSuite2.h
+    #INCLUDEPATH += /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googletest/include \
+    #               /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googlemock/include
+
+    INCLUDEPATH += /usr/local/include \
+                   /usr/local/Cellar/nlohmann-json/3.7.3/include/
+                   #/usr/local/curl/include
+
+    LIBS += /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googletest/install/libgtest.a \
+            /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googletest/install/libgtest_main.a \
+            -lcurl
+
+    #QMAKE_CXXFLAGS += --coverage
+    #QMAKE_LFLAGS += --coverage
+
+    SOURCES += \
+       tests/DbManagerTest.cpp \
+       tests/JsonApiTest.cpp \
+       tests/JsonParserTest.cpp \
+       src/DbManager.cpp \
+       src/JsonApi.cpp \
+       tests/test_main.cpp
+} else {
+    message(Normal build)
+
+    INCLUDEPATH += /usr/local/include \
+                   /usr/local/Cellar/nlohmann-json/3.7.3/include/
+
+    LIBS += -lcurl
+            #-lsqlite3
+
+    SOURCES += \
+        src/JsonApi.cpp \
+        src/JsonParser.cpp \
+        src/WeatherData.cpp \
+        src/main.cpp \
+        src/mainwindow.cpp \
+        src/DbManager.cpp \
+        src/qcustomplot.cpp
+
+    HEADERS += \
+        inc/JsonApi.hpp \
+        inc/JsonParser.hpp \
+        inc/WeatherData.hpp \
+        inc/mainwindow.h \
+        inc/DbManager.hpp \
+        inc/qcustomplot.h
+}
+
+#INCLUDEPATH += /usr/local/include \
+#               /usr/local/Cellar/nlohmann-json/3.7.3/include/
+
+#LIBS += -lcurl \
+#        -lsqlite3
+
 
 FORMS += \
     mainwindow.ui
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+# qnx: target.path = /tmp/$${TARGET}/bin
+# else: unix:!android: target.path = /opt/$${TARGET}/bin
+# !isEmpty(target.path): INSTALLS += target
+

@@ -103,8 +103,17 @@ void JsonParser::fetchSensorRead() {
 
 void JsonParser::fetchStationAirQuality() {
   json j = json::parse(_urlResponse);
-  _stationAirQuality =
-      std::make_pair(j["stCalcDate"], j["stIndexLevel"]["indexLevelName"]);
+  if ((j["stCalcDate"].is_null()))
+  {
+      qDebug() << "test";
+    _stationAirQuality =
+       std::make_pair("null", "null");
+  }else
+  {
+       qDebug() << "test2";
+    _stationAirQuality =
+       std::make_pair(j["stCalcDate"], j["stIndexLevel"]["indexLevelName"]);
+  }
 }
 
 void JsonParser::fetchCracowId() {
@@ -114,7 +123,9 @@ void JsonParser::fetchCracowId() {
 
 void JsonParser::fetchWeatherData() {
   json j = json::parse(_urlResponse);
-  _weatherData->timestamp = "6:00";
+  QDateTime dateTime = QDateTime::currentDateTime();
+  QString dateTimeString = dateTime.toString();
+  _weatherData->timestamp = dateTimeString;
   _weatherData->temperature = j["main"]["temp"];
   _weatherData->pressure = j["main"]["pressure"];
   _weatherData->humidity = j["main"]["humidity"];
