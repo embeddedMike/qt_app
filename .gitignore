@@ -1,4 +1,4 @@
 *.db
 .vscode/
 bin/
-qt_app.pro.user.8a91bb2
+qt_app.pro.user.*

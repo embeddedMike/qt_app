@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
   //setupStatisticalDemo(ui->statisticPlot);
-  setupRealtimeDataDemo(ui->realTimePlot);
+  //setupRealtimeDataDemo(ui->realTimePlot);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -32,11 +32,11 @@ void MainWindow::realtimeDataSlot() {
   dateTimeTicker->setTickCount(2);
   dateTimeTicker->setTickStepStrategy(QCPAxisTicker::TickStepStrategy::tssReadability);
   dateTimeTicker->setDateTimeFormat("hh:mm:ss");
-  ui->realTimePlot->xAxis->setTicker(dateTimeTicker);
+  //ui->realTimePlot->xAxis->setTicker(dateTimeTicker);
   // add data to lines:
-  ui->realTimePlot->graph(0)->addData(time, 1.1);
-  ui->realTimePlot->xAxis->setRange(time, 10000, Qt::AlignRight);
-  ui->realTimePlot->replot();
+  //ui->realTimePlot->graph(0)->addData(time, 1.1);
+  //ui->realTimePlot->xAxis->setRange(time, 10000, Qt::AlignRight);
+  //ui->realTimePlot->replot();
 }
 
 void MainWindow::setupDemo() {}

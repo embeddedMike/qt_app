@@ -2,7 +2,7 @@ QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-CONFIG += c++17 force_debug_info
+CONFIG += c++17 force_debug_info test
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -38,20 +38,17 @@ test {
     message(Test build)
     QT += testlib
     TARGET = UnitTests
+    #mac:
+    #INCLUDEPATH += /usr/local/include \
+    #               /usr/local/Cellar/nlohmann-json/3.7.3/include/
+    #               /usr/local/curl/include
 
-    #SOURCES -= main.cpp
+    #LIBS += /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googletest/install/libgtest.a \
+    #        /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googletest/install/libgtest_main.a \
+    #        -lcurl
 
-    #HEADERS += test/testSuite1.h \
-    #   test/testSuite2.h
-    #INCLUDEPATH += /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googletest/include \
-    #               /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googlemock/include
-
-    INCLUDEPATH += /usr/local/include \
-                   /usr/local/Cellar/nlohmann-json/3.7.3/include/
-                   #/usr/local/curl/include
-
-    LIBS += /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googletest/install/libgtest.a \
-            /Users/mike/Projects/GoogleTestWithQtLab/SimpleGTest-Solution/GoogleTest/googletest/googletest/install/libgtest_main.a \
+    LIBS += -lgtest \
+            -lgmock \
             -lcurl
 
     #QMAKE_CXXFLAGS += --coverage
@@ -66,12 +63,12 @@ test {
        tests/test_main.cpp
 } else {
     message(Normal build)
+    #mac:
+    #INCLUDEPATH += /usr/local/include \
+    #               /usr/local/Cellar/nlohmann-json/3.7.3/include/
 
-    INCLUDEPATH += /usr/local/include \
-                   /usr/local/Cellar/nlohmann-json/3.7.3/include/
-
-    LIBS += -lcurl
-            #-lsqlite3
+    #LIBS += -lcurl
+    #        -lsqlite3
 
     SOURCES += \
         src/JsonApi.cpp \
@@ -90,12 +87,6 @@ test {
         inc/DbManager.hpp \
         inc/qcustomplot.h
 }
-
-#INCLUDEPATH += /usr/local/include \
-#               /usr/local/Cellar/nlohmann-json/3.7.3/include/
-
-#LIBS += -lcurl \
-#        -lsqlite3
 
 
 FORMS += \

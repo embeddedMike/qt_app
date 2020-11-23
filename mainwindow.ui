@@ -79,7 +79,7 @@
      <attribute name="title">
       <string>Real Time Data</string>
      </attribute>
-     <widget class="QCustomPlot" name="realTimePlot" native="true">
+     <widget class="QCustomPlot" name="customPlot" native="true">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -335,7 +335,7 @@
   <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
-   <header>/Users/mike/Projects/qt_app/inc/qcustomplot.h</header>
+   <header>/home/mike/Projects/qt_app/inc/qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

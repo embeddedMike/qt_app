@@ -1,4 +1,5 @@
-﻿#include "curl/curl.h"
+﻿//#include "curl/curl.h"
+#include <curl/curl.h>
 #include "inc/DbManager.hpp"
 #include "inc/JsonApi.hpp"
 #include "inc/JsonParser.hpp"
